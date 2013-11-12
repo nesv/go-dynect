@@ -1,5 +1,11 @@
 # Changelog
 
+## Tue Nov 12 2013 - 0.1.4
+
+- Includes 0.1.3
+- Bug fixes
+- Testing laid out, but there is not much there, as of right now
+
 ## Tue Nov 12 2013 - 0.1.2
 
 - Bug fixes
