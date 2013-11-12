@@ -54,7 +54,10 @@ func (c *Client) Logout() error {
 }
 
 func (c *Client) Do(method, endpoint string, requestData, responseData interface{}) error {
-	if !c.LoggedIn() {
+	// Throw an error if the user tries to make a request if the client is
+	// logged out/unauthenticated, but make an exemption for when the
+	// caller is trying to log in.
+	if !c.LoggedIn() && method != "POST" && endpoint != "Session" {
 		return errors.New("Will not perform request; httpclient is closed")
 	}
 
