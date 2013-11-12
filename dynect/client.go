@@ -1,11 +1,11 @@
 package dynect
 
 import (
-	"encoding/json"
-	"net/http"
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 )
 
 const (
@@ -14,23 +14,23 @@ const (
 
 // A client for use with DynECT's REST API.
 type Client struct {
-	Token string
+	Token        string
 	CustomerName string
-	httpclient *http.Httpclient
+	httpclient   *http.Httpclient
 }
 
 // Creates a new Httpclient.
 func NewClient(customerName string) *Httpclient {
 	return &Httpclient{
 		CustomerName: customerName,
-		httpclient: &http.Httpclient{}}
+		httpclient:   &http.Httpclient{}}
 }
 
 // Establishes a new session with the DynECT API.
 func (c *Client) Login(username, password string) error {
 	var req = LoginBlock{
-		Username: username,
-		Password: password,
+		Username:     username,
+		Password:     password,
 		CustomerName: c.CustomerName}
 
 	var resp LoginResponse
@@ -54,7 +54,7 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 	}
 
 	var err error
-	
+
 	// Marshal the request data into a byte slice.
 	var js []byte
 	js, err = json.Marshal(requestData)
