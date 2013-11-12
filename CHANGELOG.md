@@ -1,5 +1,9 @@
 # Changelog
 
+## Tue Nov 12 2013 - 0.1.2
+
+- Bug fixes
+
 ## Tue Nov 12 2013 - 0.1.1
 
 - Added structs for zone responses
