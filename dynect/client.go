@@ -22,7 +22,7 @@ type Client struct {
 
 // Creates a new Httpclient.
 func NewClient(customerName string) *Client {
-	return &Httpclient{
+	return &Client{
 		CustomerName: customerName,
 		httpclient:   &http.Client{}}
 }
