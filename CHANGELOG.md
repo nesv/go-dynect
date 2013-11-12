@@ -1,5 +1,12 @@
 # Changelog
 
+## Tue Nov 13 2013 - 0.1.5
+
+- Bug fixes
+  - Logic bug in the *Client.Do() function, where it would not allow the
+    POST /Session call if the client was logged out (POST /Session is used for
+    logging in)
+
 ## Tue Nov 12 2013 - 0.1.4
 
 - Includes 0.1.3
