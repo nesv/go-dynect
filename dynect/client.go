@@ -37,6 +37,10 @@ func (c *Client) Login(username, password string) error {
 	var resp LoginResponse
 
 	err := c.Do("POST", "Session", req, &resp)
+	if err != nil {
+		return err
+	}
+
 	c.Token = resp.Data.Token
 	return nil
 }
