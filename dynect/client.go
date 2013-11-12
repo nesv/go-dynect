@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"errors"
 )
 
 const (
@@ -16,14 +17,14 @@ const (
 type Client struct {
 	Token        string
 	CustomerName string
-	httpclient   *http.Httpclient
+	httpclient   *http.Client
 }
 
 // Creates a new Httpclient.
-func NewClient(customerName string) *Httpclient {
+func NewClient(customerName string) *Client {
 	return &Httpclient{
 		CustomerName: customerName,
-		httpclient:   &http.Httpclient{}}
+		httpclient:   &http.Client{}}
 }
 
 // Establishes a new session with the DynECT API.
@@ -77,8 +78,8 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 	resp, err = c.httpclient.Do(req)
 	if err != nil {
 		return err
-	} else if response.StatusCode != 200 {
-		return errors.New(fmt.Sprintf("Bad response, got %q", response.Status))
+	} else if resp.StatusCode != 200 {
+		return errors.New(fmt.Sprintf("Bad response, got %q", resp.Status))
 	}
 
 	// Unmarshal the response data into the provided struct.
