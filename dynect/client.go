@@ -16,7 +16,7 @@ const (
 
 func init() {
 	// Set the logging prefix.
-	log.SetPrefix("go-dynect")
+	log.SetPrefix("go-dynect ")
 }
 
 // A client for use with DynECT's REST API.
@@ -85,7 +85,11 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 		log.Println("Marshaling request data")
 	}
 	var js []byte
-	js, err = json.Marshal(requestData)
+	if requestData != nil {
+		js, err = json.Marshal(requestData)
+	} else {
+		js = []byte("")
+	}
 	if err != nil {
 		return err
 	}
