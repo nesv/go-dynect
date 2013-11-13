@@ -1,5 +1,11 @@
 # Changelog
 
+## Wed Nov 13 2013 - 0.1.7
+
+- Fixed a bug where empty request bodies would result in the API service
+  responding with a 400 Bad Request
+- Added some proper tests
+
 ## Wed Nov 13 2013 - 0.1.6
 
 - Added a "verbose" mode to the client
