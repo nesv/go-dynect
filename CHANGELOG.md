@@ -1,6 +1,10 @@
 # Changelog
 
-## Tue Nov 13 2013 - 0.1.5
+## Wed Nov 13 2013 - 0.1.6
+
+- Added a "verbose" mode to the client
+
+## Tue Nov 12 2013 - 0.1.5
 
 - Bug fixes
   - Logic bug in the *Client.Do() function, where it would not allow the
