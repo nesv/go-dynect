@@ -3,11 +3,11 @@ package dynect
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
-	"net/http"
-	"errors"
 	"log"
+	"net/http"
 )
 
 const (
@@ -24,7 +24,7 @@ type Client struct {
 	Token        string
 	CustomerName string
 	httpclient   *http.Client
-	verbose bool
+	verbose      bool
 }
 
 // Creates a new Httpclient.

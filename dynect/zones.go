@@ -6,8 +6,8 @@ type ZoneResponse struct {
 }
 
 type ZoneDataBlock struct {
-	Serial int `json:"serial"`
+	Serial      int    `json:"serial"`
 	SerialStyle string `json:"serial_style"`
-	Zone string `json:"zone"`
-	ZoneType string `json:"zone_type"`
+	Zone        string `json:"zone"`
+	ZoneType    string `json:"zone_type"`
 }
