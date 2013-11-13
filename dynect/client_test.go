@@ -3,12 +3,13 @@ package dynect
 import (
 	"os"
 	"testing"
+	"strings"
 )
 
 var (
 	DynCustomerName string
-	DynUsername string
-	DynPassword string
+	DynUsername     string
+	DynPassword     string
 )
 
 func init() {
@@ -42,5 +43,32 @@ func TestLoginLogout(t *testing.T) {
 	err = client.Logout()
 	if err != nil {
 		t.Error(err)
+	}
+}
+
+func TestZonesRequest(t *testing.T) {
+	client := NewClient(DynCustomerName)
+	client.Verbose(true)
+	err := client.Login(DynUsername, DynPassword)
+	if err != nil {
+		t.Error(err)
+	}
+	defer func() {
+		err = client.Logout()
+		if err != nil {
+			t.Error(err)
+		}
+	}()
+
+	var resp ZonesResponse
+	err = client.Do("GET", "Zone", nil, &resp)
+	if err != nil {
+		t.Error(err)
+	}
+
+	nresults := len(resp.Data)
+	for i, zone := range resp.Data {
+		parts := strings.Split(zone, "/")
+		t.Logf("(%d/%d) %q", i+1, nresults, parts[len(parts)-2])
 	}
 }

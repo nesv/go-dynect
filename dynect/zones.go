@@ -1,8 +1,13 @@
 package dynect
 
+type ZonesResponse struct {
+	ResponseBlock
+	Data []string `json:"data"`
+}
+
 type ZoneResponse struct {
 	ResponseBlock
-	Data []ZoneDataBlock `json:"data"`
+	Data ZoneDataBlock `json:"data"`
 }
 
 type ZoneDataBlock struct {
