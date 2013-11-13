@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"errors"
+	"log"
 )
 
 const (
@@ -18,6 +19,7 @@ type Client struct {
 	Token        string
 	CustomerName string
 	httpclient   *http.Client
+	verbose bool
 }
 
 // Creates a new Httpclient.
@@ -25,6 +27,16 @@ func NewClient(customerName string) *Client {
 	return &Client{
 		CustomerName: customerName,
 		httpclient:   &http.Client{}}
+}
+
+// Enable, or disable verbose output from the client.
+//
+// This will enable (or disable) logging messages that explain what the client
+// is about to do, like the endpoint it is about to make a request to. If the
+// request fails with an unexpected HTTP response code, then the response body
+// will be logged out, as well.
+func (c *Client) Verbose(p bool) {
+	c.verbose = p
 }
 
 // Establishes a new session with the DynECT API.
@@ -64,6 +76,9 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 	var err error
 
 	// Marshal the request data into a byte slice.
+	if c.verbose {
+		log.Println("Marshaling request data")
+	}
 	var js []byte
 	js, err = json.Marshal(requestData)
 	if err != nil {
@@ -81,21 +96,36 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 	req.Header.Set("Auth-Token", c.Token)
 	req.Header.Set("Content-Type", "application/json")
 
+	if c.verbose {
+		log.Printf("Making %s request to %q", method, endpoint)
+	}
+
 	var resp *http.Response
 	resp, err = c.httpclient.Do(req)
 	if err != nil {
 		return err
 	} else if resp.StatusCode != 200 {
+		if c.verbose {
+			// Print out the response body.
+			respBody, _ := ioutil.ReadAll(resp.Body)
+			log.Printf("%s", string(respBody))
+		}
 		return errors.New(fmt.Sprintf("Bad response, got %q", resp.Status))
 	}
 
 	// Unmarshal the response data into the provided struct.
+	if c.verbose {
+		log.Println("Reading in response data")
+	}
 	var respBody []byte
 	respBody, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
 
+	if c.verbose {
+		log.Println("Unmarshaling response data")
+	}
 	err = json.Unmarshal(respBody, &responseData)
 	return err
 }
