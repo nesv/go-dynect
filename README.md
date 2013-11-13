@@ -27,7 +27,7 @@ A DynECT REST client for the Go programming language.
 			if err != nil {
 				log.Fatal(err)
 			}
-		}
+		}()
 
 		// Make a request to the API, to get a list of all, managed DNS zones
 		var response ZonesResponse
