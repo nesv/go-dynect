@@ -1,5 +1,7 @@
 # Changelog
 
+## Thu Nov 14 2013 - 0.1.8
+
 ## Wed Nov 13 2013 - 0.1.7
 
 - Fixed a bug where empty request bodies would result in the API service
