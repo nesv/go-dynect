@@ -136,5 +136,10 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 		log.Println("Unmarshaling response data")
 	}
 	err = json.Unmarshal(respBody, &responseData)
+	if err != nil {
+		respBody, _ := ioutil.ReadAll(resp.Body)
+		log.Printf("%s", string(respBody))
+	}
+
 	return err
 }
