@@ -1,5 +1,10 @@
 # Changelog
 
+## Thu Nov 14 2013 - 0.1.9
+
+- If verbosity is enabled, any unmarshaling errors will print the complete
+  response body out, via logger
+
 ## Thu Nov 14 2013 - 0.1.8
 
 ## Wed Nov 13 2013 - 0.1.7
