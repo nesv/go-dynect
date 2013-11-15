@@ -1,5 +1,11 @@
 # Changelog
 
+## Fri Nov 15 2013 - 0.2.0
+
+- Fixed some struct field types
+- Modified some of the tests
+- Felt like it deserved a minor version bump
+
 ## Thu Nov 14 2013 - 0.1.9
 
 - If verbosity is enabled, any unmarshaling errors will print the complete
