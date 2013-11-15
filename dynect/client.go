@@ -112,6 +112,10 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 	var resp *http.Response
 	resp, err = c.httpclient.Do(req)
 	if err != nil {
+		if c.verbose {
+			respBody, _ := ioutil.ReadAll(resp.Body)
+			log.Printf("%s", string(respBody))
+		}
 		return err
 	} else if resp.StatusCode != 200 {
 		if c.verbose {
@@ -138,7 +142,11 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 	err = json.Unmarshal(respBody, &responseData)
 	if err != nil {
 		respBody, _ := ioutil.ReadAll(resp.Body)
-		log.Printf("%s", string(respBody))
+		if resp.ContentLength == 0 || resp.ContentLength == -1 {
+			log.Println("Zero-length content body")
+		} else {
+			log.Printf("%s", string(respBody))
+		}
 	}
 
 	return err

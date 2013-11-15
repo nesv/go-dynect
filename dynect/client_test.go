@@ -100,6 +100,15 @@ func TestFetchingAllZoneRecords(t *testing.T) {
 	}
 	for _, zr := range resp.Data {
 		parts := strings.Split(zr, "/")
-		t.Logf("%s\t%s\t%s", parts[2], parts[3] + "/" + parts[4], parts[5])
+		uri := strings.Join(parts[2:], "/")
+		t.Log(uri)
+
+		var record RecordResponse
+		err := client.Do("GET", uri, nil, &record)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		t.Log("OK")
 	}
 }
