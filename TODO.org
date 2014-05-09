@@ -1,0 +1,21 @@
+* TODO Heartbeat
+  Add a Heartbeat() method to the dynect.Client type, for cases where a client
+  may be used in a situation where there are extended periods of no API calls.
+
+  The Heartbeat() method would simply issue an HTTP PUT request to the 
+  "/REST/Session" endpoint to keep the session alive.
+
+  The Heartbeat() method could also, potentially, be complemented with
+  StartHeartbeat() and StopHeartbeat() methods to have the heartbeating run in
+  the background.
+
+** TODO go-dynect/dynect.Client.Heartbeat()
+   Send an HTTP PUT request to "/REST/Session".
+
+** TODO go-dynect/dynect.Client.StartHeartbeat()
+   Start a goroutine, in the background, that will periodically call the
+   Heartbeat() method.
+
+** TODO go-dynect/dynect.Client.StopHeartbeat()
+   Stop the background goroutine that is periodically calling the Heartbeat()
+   method.
