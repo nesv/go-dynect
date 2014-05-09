@@ -4,14 +4,14 @@ A DynECT REST client for the Go programming language.
 
 ## Installation
 
-	$ go get bitbucket.org/_nesv/go-dynect/dynect
+	$ go get github.com/nesv/go-dynect/dynect
 
 ## Usage
 
 	package main
 
 	import (
-		"bitbucket.org/_nesv/go-dynect/dynect"
+		"github.com/nesv/go-dynect/dynect"
 		"log"
 	)
 
