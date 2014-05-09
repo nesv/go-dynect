@@ -106,7 +106,7 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 	req.Header.Set("Content-Type", "application/json")
 
 	if c.verbose {
-		log.Printf("Making %s request to %q", method, endpoint)
+		log.Printf("Making %s request to %q", method, url)
 	}
 
 	var resp *http.Response
