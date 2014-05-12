@@ -1,6 +1,13 @@
 # dynctl
 
-A command-line tool for working with DynECT.
+A command-line tool for working with DynECT, that uses your `~/.netrc` file for
+credentials.
+
+## ~/.netrc
+
+By default, dynctl looks for a record in your `~/.netrc` file with the `machine`
+name `api.dynect.net`; however, you can tell dynctl to use a different record by
+specifying the `--machine, -m` flag.
 
 ## Usage
 
