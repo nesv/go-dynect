@@ -166,27 +166,3 @@ type DataBlock struct {
 	// SRV
 	Weight string `json:"weight,omitempty" bson:"weight,omitempty"`
 }
-
-/*
-Represents an A record.
-*/
-type ARecord struct {
-	BaseRecord
-	RData ARDataBlock `json:"rdata"`
-}
-
-/*
-Represents an AAAA record.
-
-It uses the ADataBlock struct for is nested record data, as there is zero
-difference in the structure between an A record and an AAAA record; the
-only difference is in the value of the data, itself.
-*/
-type AAAARecord struct {
-	BaseRecord
-	RData ARDataBlock `json:"rdata"`
-}
-
-type ARDataBlock struct {
-	Address string `json:"address"`
-}
