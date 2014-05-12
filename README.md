@@ -1,43 +1,19 @@
 # go-dynect
 
-A DynECT REST client for the Go programming language.
+Libraries and utilities for working with DynECT's API.
 
-## Installation
+Each sub-package has their own README, and I recommend checking those out.
+
+## go-dynect/dynect
+
+The `github.com/nesv/go-dynect/dynect` package provides a simple HTTP/JSON
+client and structs for working with DynECT's API. To use it, just run:
 
 	$ go get github.com/nesv/go-dynect/dynect
+	
+## go-dynect/dynctl
 
-## Usage
+The dynctl command is a work-in-progress utility that lets you manage your
+DynECT records from the command-line. To install it, run:
 
-	package main
-
-	import (
-		"github.com/nesv/go-dynect/dynect"
-		"log"
-	)
-
-	func main() {
-		client := dynect.NewClient("my-dyn-customer-name")
-		err := client.Login("my-dyn-username", "my-dyn-password")
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		defer func() {
-			err := client.Logout()
-			if err != nil {
-				log.Fatal(err)
-			}
-		}()
-
-		// Make a request to the API, to get a list of all, managed DNS zones
-		var response ZonesResponse
-		if err := client.Do("GET", "Zone", nil, &response); err != nil {
-			log.Println(err)
-		}
-
-		for _, zone := range response.Data {
-			log.Printf("Zone %q Serial %d", zone.Zone, zone.Serial)
-		}
-	}
-
-More to come!
+	$ go get github.com/nesv/go-dynct/dynctl
