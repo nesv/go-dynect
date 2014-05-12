@@ -1,10 +1,15 @@
 package dynect
 
+// Type AllRecordsResponse is a struct for holding a list of all URIs returned
+// from an HTTP GET call to either https://api.dynect.net/REST/AllRecord/<zone>
+// or https://api/dynect.net/REST/AllRecord/<zone>/<FQDN>/.
 type AllRecordsResponse struct {
 	ResponseBlock
 	Data []string `json:"data"`
 }
 
+// Type RecordResponse is used to hold the information for a single DNS record
+// returned from Dyn's DynECT API.
 type RecordResponse struct {
 	ResponseBlock
 	Data BaseRecord `json:"data"`
@@ -18,14 +23,19 @@ response data to. Instead, it should aid in the composition of a more-specific
 response struct.
 */
 type BaseRecord struct {
-	FQDN       string `json:"fqdn"`
-	RecordId   int `json:"record_id"`
-	RecordType string `json:"record_type"`
-	TTL        int `json:"ttl"`
-	Zone       string `json:"zone"`
-	RData DataBlock `json:"rdata"`
+	FQDN       string    `json:"fqdn"`
+	RecordId   int       `json:"record_id"`
+	RecordType string    `json:"record_type"`
+	TTL        int       `json:"ttl"`
+	Zone       string    `json:"zone"`
+	RData      DataBlock `json:"rdata"`
 }
 
+// Type DataBlock is nested within the BaseRecord struct, and is used for
+// holding record information.
+//
+// The comment above each field indicates which record types you can expect
+// the information to be provided.
 type DataBlock struct {
 	// A, AAAA
 	Address string `json:"address,omitempty" bson:"address,omitempty"`
