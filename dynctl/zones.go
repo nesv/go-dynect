@@ -25,12 +25,20 @@ import (
 	"github.com/nesv/go-dynect/dynect"
 )
 
+func listZones() (zones []string, err error) {
+	var zonesResponse dynect.ZonesResponse
+	err = Dyn.Do("GET", "Zone", nil, &zonesResponse)
+	zones = zonesResponse.Data
+	return
+}
+
 func ListZones(c *cli.Context) {
-	var zones dynect.ZonesResponse
-	if err := Dyn.Do("GET", "Zone", nil, &zones); err != nil {
+	zones, err := listZones()
+	if err != nil {
 		log.Fatalln(err)
 	}
-	for _, zone := range zones.Data {
+
+	for _, zone := range zones {
 		parts := strings.Split(zone, "/")
 		plen := len(parts)
 		fmt.Println(parts[plen-2])
