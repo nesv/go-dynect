@@ -23,6 +23,7 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
+	"github.com/miekg/dns"
 	"github.com/nesv/go-dynect/dynect"
 )
 
@@ -117,31 +118,58 @@ func Backup(c *cli.Context) {
 		zoneRecords[zone] = resp
 	}
 
-	var records = make(map[string][]dynect.RecordResponse)
+	var rchan = make(chan map[string][]dynect.RecordResponse, len(zoneRecords))
 	for zone, zrecs := range zoneRecords {
-		zrs := make([]dynect.RecordResponse, 0)
+		go func(zone string, records dynect.AllRecordsResponse, ch chan<- map[string][]dynect.RecordResponse) {
+			var zrs = make([]dynect.RecordResponse, 0)
+			for _, rec := range records.Data {
+				parts := strings.Split(rec, "/")
 
-		for _, rec := range zrecs.Data {
-			parts := strings.Split(rec, "/")
+				fqdn := parts[len(parts)-2]
+				id := parts[len(parts)-1]
 
-			fqdn := parts[len(parts)-2]
-			id := parts[len(parts)-1]
+				uri := strings.Join([]string{parts[2], zone, fqdn, id}, "/")
 
-			uri := strings.Join([]string{parts[2], zone, fqdn, id}, "/")
+				var resp dynect.RecordResponse
+				if err := Dyn.Do("GET", uri, nil, &resp); err != nil {
+					log.Fatalln(err)
+				}
 
-			var resp dynect.RecordResponse
-			if err := Dyn.Do("GET", uri, nil, &resp); err != nil {
-				log.Fatalln(err)
+				zrs = append(zrs, resp)
+
+				if c.GlobalBool("verbose") {
+					log.Printf("retrieved record data for %s/%s/%s", zone, fqdn, id)
+				}
 			}
-
-			zrs = append(zrs, resp)
-
-			if c.GlobalBool("verbose") {
-				log.Printf("retrieved record data for %s/%s/%s", zone, fqdn, id)
-			}
-		}
-
-		records[zone] = zrs
+			ch <- map[string][]dynect.RecordResponse{zone: zrs}
+		}(zone, zrecs, rchan)
 	}
+	var records = make(map[string][]dynect.RecordResponse)
+	for i := 0; i < len(zoneRecords); i++ {
+		zrecs := <-rchan
+		for z, r := range zrecs {
+			records[z] = r
+		}
+	}
+	close(rchan)
 	return
+}
+
+type ZoneFile struct {
+	SOA   dns.SOA
+	A     []dns.A
+	AAAA  []dns.AAAA
+	AFSDB []dns.AFSDB
+}
+
+func (zf *ZoneFile) Generate() (output []byte, err error) {
+	return
+}
+
+func generateZoneFile(zone string, records []dynect.RecordResponse) (zf string, err error) {
+	for _, rec := range records {
+		if rec.RName != "" {
+			// We have found our SOA record!
+		}
+	}
 }
