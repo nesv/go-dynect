@@ -40,6 +40,7 @@ const (
 
 func main() {
 	log.SetFlags(0)
+	log.SetPrefix("")
 	app := cli.NewApp()
 	app.Name = "dynctl"
 	app.Usage = "utility for working with DynECT's API"
@@ -48,10 +49,22 @@ func main() {
 	app.Flags = []cli.Flag{
 		cli.StringFlag{Name: "customer, c", Value: "", Usage: "DynECT customer name"},
 		cli.StringFlag{Name: "machine, m", Value: "api.dynect.net", Usage: "netrc machine name to refer to for credentials"},
-		cli.StringFlag{Name: "zone, z", Value: "", Usage: "the DNS zone"},
+		cli.BoolFlag{Name: "verbose", Usage: "enable verbose output for some commands"},
+		cli.BoolFlag{Name: "debug", Usage: "enable debugging output"},
 		cli.BoolFlag{Name: "porcelain, p", Usage: "enable porcelain output for piping"}}
 	app.Commands = []cli.Command{
-		{Name: "list-zones", ShortName: "lsz", Usage: "list all zones", Action: ListZones}}
+		{
+			Name:        "backup",
+			Usage:       "backup zones",
+			Description: BackupDescription,
+			Action:      Backup,
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: "outputdir, o", Value: "", Usage: "the directory to write zone files to"}}},
+		{
+			Name:      "list-zones",
+			ShortName: "lsz",
+			Usage:     "list all zones",
+			Action:    ListZones}}
 	app.Run(os.Args)
 }
 
@@ -78,6 +91,9 @@ func Initialize(c *cli.Context) error {
 				if err != nil {
 					return err
 				}
+
+				Dyn.Verbose(c.GlobalBool("debug"))
+
 				return nil
 			}
 		}
