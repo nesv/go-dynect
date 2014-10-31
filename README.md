@@ -36,7 +36,7 @@ A DynECT REST client for the Go programming language.
 		}
 
 		for _, zone := range response.Data {
-			log.Println("Zone ", zone)
+			log.Println("Zone", zone)
 		}
 	}
 
