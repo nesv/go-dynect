@@ -30,13 +30,13 @@ A DynECT REST client for the Go programming language.
 		}()
 
 		// Make a request to the API, to get a list of all, managed DNS zones
-		var response ZonesResponse
+		var response dynect.ZonesResponse
 		if err := client.Do("GET", "Zone", nil, &response); err != nil {
 			log.Println(err)
 		}
 
 		for _, zone := range response.Data {
-			log.Printf("Zone %q Serial %d", zone.Zone, zone.Serial)
+			log.Println("Zone ", zone)
 		}
 	}
 
