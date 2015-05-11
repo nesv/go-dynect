@@ -167,7 +167,7 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 
 	switch resp.StatusCode {
 	case 200:
-		if resp.ContentLength == 0 || resp.ContentLength == -1 {
+		if resp.ContentLength == 0 {
 			// Zero-length content body?
 			log.Println("dynect: warning: zero-length response body; skipping decoding of response")
 			return nil
