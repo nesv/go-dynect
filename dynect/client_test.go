@@ -2,15 +2,15 @@ package dynect
 
 import (
 	"os"
-	"testing"
 	"strings"
+	"testing"
 )
 
 var (
 	DynCustomerName string
 	DynUsername     string
 	DynPassword     string
-	testZone string
+	testZone        string
 )
 
 func init() {
@@ -94,7 +94,7 @@ func TestFetchingAllZoneRecords(t *testing.T) {
 	}()
 
 	var resp AllRecordsResponse
-	err = client.Do("GET", "AllRecord/" + testZone, nil, &resp)
+	err = client.Do("GET", "AllRecord/"+testZone, nil, &resp)
 	if err != nil {
 		t.Error(err)
 	}

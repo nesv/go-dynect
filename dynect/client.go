@@ -156,6 +156,7 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 
 	var resp *http.Response
 	resp, err = c.transport.RoundTrip(req)
+
 	if err != nil {
 		if c.verbose {
 			respBody, _ := ioutil.ReadAll(resp.Body)
