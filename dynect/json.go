@@ -44,3 +44,15 @@ type LoginDataBlock struct {
 	Token   string `json:"token"`
 	Version string `json:"version"`
 }
+
+// RecordRequest holds the request body for a record create/update
+type RecordRequest struct {
+	RData DataBlock `json:"rdata"`
+	TTL   string    `json:"ttl,omitempty"`
+}
+
+// PublishZoneBlock holds the request body for a publish zone request
+// https://help.dyn.com/update-zone-api/
+type PublishZoneBlock struct {
+	Publish bool `json:"publish"`
+}
