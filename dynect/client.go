@@ -174,8 +174,16 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 			return nil
 		}
 
-		dec := json.NewDecoder(resp.Body)
-		return dec.Decode(&responseData)
+		//dec := json.NewDecoder(resp.Body)
+		text, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return fmt.Errorf("Could not read response body")
+		}
+		if err := json.Unmarshal(text, &responseData); err != nil {
+			return fmt.Errorf("Error unmarshalling response:", err)
+		}
+
+		return nil
 
 	case 307:
 		// Handle the temporary redirect, which should point to a
@@ -197,11 +205,15 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 			loc = fmt.Sprintf("%s/%s", DynAPIPrefix, loc)
 		}
 
+		log.Println("Fetching location:", loc)
+
 		// Generate a new request.
 		req, err := c.newRequest("GET", loc, nil)
 		if err != nil {
 			return err
 		}
+
+		var jobData JobData
 
 		// Poll the API endpoint, until we get a response back.
 		for {
@@ -213,9 +225,13 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 				}
 				defer resp.Body.Close()
 
-				dec := json.NewDecoder(resp.Body)
-				if err := dec.Decode(&responseData); err != nil {
-					return fmt.Errorf("failed to decode response body")
+				text, err := ioutil.ReadAll(resp.Body)
+				//log.Println(string(text))
+				if err != nil {
+					return fmt.Errorf("Could not read response body:", err)
+				}
+				if err := json.Unmarshal(text, &jobData); err != nil {
+					return fmt.Errorf("failed to decode job response body:", err)
 				}
 
 				// Check to see the status of the job.
@@ -227,19 +243,17 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 				//
 				// TODO(nesv): Figure out what to do in the
 				// event of a "failure" job status.
-				rb, ok := responseData.(ResponseBlock)
-				if !ok {
-					// ???
-					return fmt.Errorf("failed to coerce response data")
-				}
 
-				switch rb.Status {
+				switch jobData.Status {
 				case "incomplete":
 					continue
 				case "success":
+					if err := json.Unmarshal(text, &responseData); err != nil {
+						return fmt.Errorf("failed to decode response body:", err)
+					}
 					return nil
 				case "failure":
-					return fmt.Errorf("request failed: %v", rb.Messages)
+					return fmt.Errorf("request failed: %v", jobData.Messages)
 				}
 			}
 		}
