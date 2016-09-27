@@ -17,10 +17,7 @@ const (
 )
 
 var (
-	PollingInterval = 1 * time.Second
-)
-
-var (
+	PollingInterval  = 1 * time.Second
 	ErrPromotedToJob = errors.New("promoted to job")
 )
 
