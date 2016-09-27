@@ -57,7 +57,7 @@ type Client struct {
 func NewClient(customerName string) *Client {
 	return &Client{
 		CustomerName: customerName,
-		transport:    &http.Transport{},
+		transport:    &http.Transport{Proxy: http.ProxyFromEnvironment},
 	}
 }
 
