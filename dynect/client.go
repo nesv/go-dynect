@@ -17,10 +17,7 @@ const (
 )
 
 var (
-	PollingInterval = 1 * time.Second
-)
-
-var (
+	PollingInterval  = 1 * time.Second
 	ErrPromotedToJob = errors.New("promoted to job")
 )
 
@@ -57,7 +54,7 @@ type Client struct {
 func NewClient(customerName string) *Client {
 	return &Client{
 		CustomerName: customerName,
-		transport:    &http.Transport{},
+		transport:    &http.Transport{Proxy: http.ProxyFromEnvironment},
 	}
 }
 
