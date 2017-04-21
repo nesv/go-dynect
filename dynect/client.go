@@ -19,6 +19,7 @@ const (
 var (
 	PollingInterval  = 1 * time.Second
 	ErrPromotedToJob = errors.New("promoted to job")
+	ErrRateLimited   = errors.New("too many requests")
 )
 
 // handleJobRedirect overrides the net/http.DefaultClient's redirection policy
@@ -256,6 +257,9 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 		}
 
 		return nil
+
+	case 429:
+		return ErrRateLimited
 	}
 
 	// If we got here, this means that the client does not know how to
