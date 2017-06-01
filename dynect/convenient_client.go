@@ -18,7 +18,7 @@ func NewConvenientClient(customerName string) *ConvenientClient {
 	return &ConvenientClient{
 		Client{
 			CustomerName: customerName,
-			httpclient:   &http.Client{},
+			transport:    &http.Transport{Proxy: http.ProxyFromEnvironment},
 		}}
 }
 

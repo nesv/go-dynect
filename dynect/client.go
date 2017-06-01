@@ -46,7 +46,6 @@ func handleJobRedirect(req *http.Request, via []*http.Request) error {
 type Client struct {
 	Token        string
 	CustomerName string
-	httpclient   *http.Client
 	transport    *http.Transport
 	verbose      bool
 }
