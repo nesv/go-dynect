@@ -1,5 +1,20 @@
 # Changelog
 
+## Fri Apr 21 2017 - 0.3.1
+
+- Proxy support configurable with HTTP(S)_PROXY env variables
+- Handle rate limit errors
+
+## Thu Sep 22 2016 - 0.3.0
+
+- Verbose mode prints full url
+- Handle Job redirections
+- Support for unknown Content-Length
+- Addition of ConvenientClient
+- Support for Traffic Director (DSF) service
+
+- BUGFIX: Don't override global log prefix
+
 ## Fri Nov 15 2013 - 0.2.0
 
 - Fixed some struct field types
