@@ -40,6 +40,9 @@ type DataBlock struct {
 	// A, AAAA
 	Address string `json:"address,omitempty" bson:"address,omitempty"`
 
+	// ALIAS
+	Alias string `json:"alias,omitempty" bson:"alias,omitempty"`
+
 	// CERT, DNSKEY, DS, IPSECKEY, KEY, SSHFP
 	Algorithm string `json:"algorithm,omitempty" bson:"algorithm,omitempty"`
 

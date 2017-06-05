@@ -119,11 +119,20 @@ func (c *ConvenientClient) GetRecord(record *Record) error {
 	switch rec.Data.RecordType {
 	case "A", "AAAA":
 		record.Value = rec.Data.RData.Address
+	case "ALIAS":
+		record.Value = rec.Data.RData.Alias
 	case "CNAME":
 		record.Value = rec.Data.RData.CName
+	case "MX":
+		record.Value = fmt.Sprintf("%d %s", rec.Data.RData.Preference, rec.Data.RData.Exchange)
+	case "NS":
+		record.Value = rec.Data.RData.NSDName
+	case "SOA":
+		record.Value = rec.Data.RData.RName
 	case "TXT", "SPF":
 		record.Value = rec.Data.RData.TxtData
 	default:
+		fmt.Println("unknown response", rec)
 		return fmt.Errorf("Invalid Dyn record type: %s", rec.Data.RecordType)
 	}
 
@@ -138,9 +147,24 @@ func buildRData(r *Record) (DataBlock, error) {
 		rdata = DataBlock{
 			Address: r.Value,
 		}
+	case "ALIAS":
+		rdata = DataBlock{
+			Alias: r.Value,
+		}
 	case "CNAME":
 		rdata = DataBlock{
 			CName: r.Value,
+		}
+	case "MX":
+		rdata = DataBlock{}
+		fmt.Sscanf(r.Value, "%d %s", &rdata.Preference, &rdata.Exchange)
+	case "NS":
+		rdata = DataBlock{
+			NSDName: r.Value,
+		}
+	case "SOA":
+		rdata = DataBlock{
+			RName: r.Value,
 		}
 	case "TXT", "SPF":
 		rdata = DataBlock{
