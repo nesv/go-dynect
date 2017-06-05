@@ -1,5 +1,14 @@
 # Changelog
 
+## Mon Jun 5 2-17 - 0.5.0
+
+- Add support for ALIAS, MX, NS, and SOA records, to the ConvenientClient
+  (PR#17)
+
+## Mon Jun 5 2017 - 0.4.0
+
+- Fix nil-transport issue with the ConvenientClinent (PR#16)
+
 ## Fri Apr 21 2017 - 0.3.1
 
 - Proxy support configurable with HTTP(S)_PROXY env variables
