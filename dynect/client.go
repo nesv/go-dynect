@@ -156,7 +156,10 @@ func (c *Client) Do(method, endpoint string, requestData, responseData interface
 
 	if err != nil {
 		if c.verbose {
-			respBody, _ := ioutil.ReadAll(resp.Body)
+			respBody, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				return err
+			}
 			log.Printf("%s", string(respBody))
 		}
 		return err
