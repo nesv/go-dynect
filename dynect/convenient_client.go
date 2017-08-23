@@ -56,7 +56,9 @@ func (c *ConvenientClient) GetRecordID(record *Record) error {
 
 // CreateRecord Method to create a DNS record
 func (c *ConvenientClient) CreateRecord(record *Record) error {
-	if record.FQDN == "" {
+	if record.FQDN == "" && record.Name == "" {
+		record.FQDN = record.Zone
+	} else if record.FQDN == "" {
 		record.FQDN = fmt.Sprintf("%s.%s", record.Name, record.Zone)
 	}
 	rdata, err := buildRData(record)
