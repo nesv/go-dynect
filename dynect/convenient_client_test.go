@@ -1,6 +1,7 @@
 package dynect
 
 import (
+	"strconv"
 	"strings"
 	"testing"
 
@@ -107,6 +108,49 @@ func TestConvenientGetCNAME(t *testing.T) {
 
 		if actual.Value != "foobar.go-dynect.test." {
 			t.Fatalf("Incorrect value %q (expected %q)", actual.Value, "foobar.go-dynect.test.")
+		}
+
+		t.Log("OK")
+	})
+}
+
+func TestConvenientCreateMX(t *testing.T) {
+	testWithConvenientClientSession("fixtures/convenient_create_mx", t, func(c *ConvenientClient) {
+		record := Record{
+			Zone:  testZone,
+			Type:  "MX",
+			Value: "123 mx.example.com.",
+			TTL:   "12345",
+		}
+
+		if err := c.CreateRecord(&record); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := c.PublishZone(testZone); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := c.GetRecordID(&record); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := c.GetRecord(&record); err != nil {
+			t.Fatal(err)
+		}
+
+		if record.FQDN != testZone {
+			t.Fatalf("Expected FQDN %q (actual %q)", testZone, record.FQDN)
+		}
+
+		id, err := strconv.Atoi(record.ID)
+		if err != nil || id <= 0 {
+			t.Fatalf("Expected ID to be positive integer (actual %q)", record.ID)
+		}
+
+		ttl, err := strconv.Atoi(record.TTL)
+		if err != nil || ttl != 12345 {
+			t.Fatalf("Expected ID to be 12345 (actual %q)", record.TTL)
 		}
 
 		t.Log("OK")
