@@ -16,11 +16,18 @@ var (
 	testZone        string
 )
 
+func getenv(key, defaultValue string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return defaultValue
+}
+
 func init() {
-	DynCustomerName = os.Getenv("DYNECT_CUSTOMER_NAME")
-	DynUsername = os.Getenv("DYNECT_USER_NAME")
-	DynPassword = os.Getenv("DYNECT_PASSWORD")
-	testZone = os.Getenv("DYNECT_TEST_ZONE")
+	DynCustomerName = getenv("DYNECT_CUSTOMER_NAME", "go-dynect")
+	DynUsername = getenv("DYNECT_USER_NAME", "dynect-user")
+	DynPassword = getenv("DYNECT_PASSWORD", "p@55w0rd")
+	testZone = getenv("DYNECT_TEST_ZONE", "go-dynect.test")
 }
 
 // test helper to begin recording or playback of vcr cassette
@@ -61,24 +68,6 @@ func testWithClientSession(cassetteName string, t *testing.T, f func(*Client)) {
 
 		f(c)
 	})
-}
-
-func TestSetup(t *testing.T) {
-	if len(DynCustomerName) == 0 {
-		t.Fatal("DYNECT_CUSTOMER_NAME not set")
-	}
-
-	if len(DynUsername) == 0 {
-		t.Fatal("DYNECT_USER_NAME not set")
-	}
-
-	if len(DynPassword) == 0 {
-		t.Fatal("DYNECT_PASSWORD not set")
-	}
-
-	if len(testZone) == 0 {
-		t.Fatal("DYNECT_TEST_ZONE not specified")
-	}
 }
 
 func TestLoginLogout(t *testing.T) {
