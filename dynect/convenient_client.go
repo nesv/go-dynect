@@ -22,12 +22,51 @@ func NewConvenientClient(customerName string) *ConvenientClient {
 		}}
 }
 
+// CreateZone method to create a zone
+func (c *ConvenientClient) CreateZone(zone, rname, serialStyle, ttl string) error {
+	url := fmt.Sprintf("Zone/%s/", zone)
+	data := &CreateZoneBlock{
+		RName:       rname,
+		SerialStyle: serialStyle,
+		TTL:         ttl,
+	}
+
+	if err := c.Do("POST", url, data, nil); err != nil {
+		return fmt.Errorf("Failed to create zone: %s", err)
+	}
+
+	return nil
+}
+
+// GetZone method to read a zone
+func (c *ConvenientClient) GetZone(z *Zone) error {
+	url := fmt.Sprintf("Zone/%s", z.Zone)
+	data := &ZoneResponse{}
+
+	if err := c.Do("GET", url, nil, data); err != nil {
+		return fmt.Errorf("Failed to get zone: %s", err)
+	}
+
+	z.Serial = strconv.Itoa(data.Data.Serial)
+	z.SerialStyle = data.Data.SerialStyle
+	z.Zone = data.Data.Zone
+	z.Type = data.Data.ZoneType
+
+	return nil
+}
+
 // PublishZone Publish a specific zone and the changes for the current session
 func (c *ConvenientClient) PublishZone(zone string) error {
+	url := fmt.Sprintf("Zone/%s", zone)
 	data := &PublishZoneBlock{
 		Publish: true,
 	}
-	return c.Do("PUT", "Zone/"+zone, data, nil)
+
+	if err := c.Do("PUT", url, data, nil); err != nil {
+		return fmt.Errorf("Failed to publish zone: %s", err)
+	}
+
+	return nil
 }
 
 // GetRecordID finds the dns record ID by fetching all records for a FQDN
