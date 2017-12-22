@@ -69,6 +69,29 @@ func (c *ConvenientClient) PublishZone(zone string) error {
 	return nil
 }
 
+// DeleteZoneNode method to delete everything in a zone
+func (c *ConvenientClient) DeleteZoneNode(zone string) error {
+	parentZone := strings.Join(strings.Split(zone, ".")[1:], ".")
+	url := fmt.Sprintf("Node/%s/%s", parentZone, zone)
+
+	if err := c.Do("DELETE", url, nil, nil); err != nil {
+		return fmt.Errorf("Failed to delete zone node: %s", err)
+	}
+
+	return nil
+}
+
+// DeleteZone method to delete a zone
+func (c *ConvenientClient) DeleteZone(zone string) error {
+	url := fmt.Sprintf("Zone/%s/", zone)
+
+	if err := c.Do("DELETE", url, nil, nil); err != nil {
+		return fmt.Errorf("Failed to delete zone: %s", err)
+	}
+
+	return nil
+}
+
 // GetRecordID finds the dns record ID by fetching all records for a FQDN
 func (c *ConvenientClient) GetRecordID(record *Record) error {
 	finalID := ""

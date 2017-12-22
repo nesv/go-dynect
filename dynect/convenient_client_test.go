@@ -195,3 +195,47 @@ func TestConvenientCreateZone(t *testing.T) {
 		t.Log("OK")
 	})
 }
+
+func TestConvenientDeleteZone(t *testing.T) {
+	testWithConvenientClientSession("fixtures/convenient_delete_zone", t, func(c *ConvenientClient) {
+		subZone := fmt.Sprintf("zone-%s", testZone)
+
+		if err := c.DeleteZone(subZone); err != nil {
+			t.Fatal(err)
+		}
+
+		z := &Zone{Zone: subZone}
+
+		if err := c.GetZone(z); err == nil {
+			t.Fatalf("Zone %q not deleted", subZone)
+		}
+
+		t.Log("OK")
+	})
+}
+
+func TestConvenientDeleteSubZone(t *testing.T) {
+	testWithConvenientClientSession("fixtures/convenient_delete_sub_zone", t, func(c *ConvenientClient) {
+		subZone := fmt.Sprintf("subzone.%s", testZone)
+
+		if err := c.DeleteZone(subZone); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := c.DeleteZoneNode(subZone); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := c.PublishZone(testZone); err != nil {
+			t.Fatal(err)
+		}
+
+		z := &Zone{Zone: subZone}
+
+		if err := c.GetZone(z); err == nil {
+			t.Fatalf("Zone %q not deleted", subZone)
+		}
+
+		t.Log("OK")
+	})
+}
