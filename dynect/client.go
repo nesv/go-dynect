@@ -58,6 +58,11 @@ func NewClient(customerName string) *Client {
 	}
 }
 
+// Sets the transport for the client.
+func (c *Client) SetTransport(t http.RoundTripper) {
+	c.Transport = t
+}
+
 // Enable, or disable verbose output from the client.
 //
 // This will enable (or disable) logging messages that explain what the client
