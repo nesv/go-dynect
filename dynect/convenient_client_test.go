@@ -1,6 +1,7 @@
 package dynect
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"testing"
@@ -151,6 +152,88 @@ func TestConvenientCreateMX(t *testing.T) {
 		ttl, err := strconv.Atoi(record.TTL)
 		if err != nil || ttl != 12345 {
 			t.Fatalf("Expected ID to be 12345 (actual %q)", record.TTL)
+		}
+
+		t.Log("OK")
+	})
+}
+
+func TestConvenientCreateZone(t *testing.T) {
+	testWithConvenientClientSession("fixtures/convenient_create_zone", t, func(c *ConvenientClient) {
+		subZone := fmt.Sprintf("subzone.%s", testZone)
+
+		if err := c.CreateZone(subZone, "admin@example.com", "day", "1800"); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := c.PublishZone(subZone); err != nil {
+			t.Fatal(err)
+		}
+
+		z := &Zone{Zone: subZone}
+
+		if err := c.GetZone(z); err != nil {
+			t.Fatal(err)
+		}
+
+		if z.Zone != subZone {
+			t.Fatalf("Expected Zone of %q (actual %q)", subZone, z.Zone)
+		}
+
+		if z.Type != "Primary" {
+			t.Fatalf("Expected Zone Type of %q (actual %q)", "Primary", z.Type)
+		}
+
+		if z.SerialStyle != "day" {
+			t.Fatalf("Expected SerialStyle of %q (actual %q)", "day", z.SerialStyle)
+		}
+
+		if z.Serial == "" {
+			t.Fatalf("Expected non-empty Serial (actual %q)", z.Serial)
+		}
+
+		t.Log("OK")
+	})
+}
+
+func TestConvenientDeleteZone(t *testing.T) {
+	testWithConvenientClientSession("fixtures/convenient_delete_zone", t, func(c *ConvenientClient) {
+		subZone := fmt.Sprintf("zone-%s", testZone)
+
+		if err := c.DeleteZone(subZone); err != nil {
+			t.Fatal(err)
+		}
+
+		z := &Zone{Zone: subZone}
+
+		if err := c.GetZone(z); err == nil {
+			t.Fatalf("Zone %q not deleted", subZone)
+		}
+
+		t.Log("OK")
+	})
+}
+
+func TestConvenientDeleteSubZone(t *testing.T) {
+	testWithConvenientClientSession("fixtures/convenient_delete_sub_zone", t, func(c *ConvenientClient) {
+		subZone := fmt.Sprintf("subzone.%s", testZone)
+
+		if err := c.DeleteZone(subZone); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := c.DeleteZoneNode(subZone); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := c.PublishZone(testZone); err != nil {
+			t.Fatal(err)
+		}
+
+		z := &Zone{Zone: subZone}
+
+		if err := c.GetZone(z); err == nil {
+			t.Fatalf("Zone %q not deleted", subZone)
 		}
 
 		t.Log("OK")

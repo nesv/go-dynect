@@ -51,6 +51,13 @@ type RecordRequest struct {
 	TTL   string    `json:"ttl,omitempty"`
 }
 
+// CreateZoneBlock holds the request body for a zone create
+type CreateZoneBlock struct {
+	RName       string `json:"rname"`
+	SerialStyle string `json:"serial_style,omitempty"`
+	TTL         string `json:"ttl"`
+}
+
 // PublishZoneBlock holds the request body for a publish zone request
 // https://help.dyn.com/update-zone-api/
 type PublishZoneBlock struct {
