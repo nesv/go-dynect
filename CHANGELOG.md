@@ -1,9 +1,31 @@
 # Changelog
 
-## Mon Jun 5 2-17 - 0.5.0
+## Tue Jan 9 2018 - 0.6.0
+
+- use VCR and fixtures for tests
+- test ConvenientClient operations
+- add support for zone create/delete operations
+
+## Wed Aug 23 2017 - 0.5.3
+
+- BUG-FIX: don't prepend dot for record with FQDN of Zone name
+
+## Fri Aug 18 2017 - 0.5.2
+
+- Handle errors reading response body in verbose mode (PR#20)
+
+## Mon Jun 5 2017 - 0.5.1
+
+- Update CHANGELOG
+
+## Mon Jun 5 2017 - 0.5.0
 
 - Add support for ALIAS, MX, NS, and SOA records, to the ConvenientClient
   (PR#17)
+
+## Mon Jun 5 2017 - 0.4.1
+
+- Handle rate limit errors
 
 ## Mon Jun 5 2017 - 0.4.0
 
@@ -12,7 +34,7 @@
 ## Fri Apr 21 2017 - 0.3.1
 
 - Proxy support configurable with HTTP(S)_PROXY env variables
-- Handle rate limit errors
+- BACKPORT: Handle rate limit errors
 
 ## Thu Sep 22 2016 - 0.3.0
 
