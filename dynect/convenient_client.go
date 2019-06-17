@@ -195,6 +195,8 @@ func (c *ConvenientClient) GetRecord(record *Record) error {
 		record.Value = rec.Data.RData.RName
 	case "TXT", "SPF":
 		record.Value = rec.Data.RData.TxtData
+	case "SRV":
+		record.Value = fmt.Sprintf("%d %d %d %s", rec.Data.RData.Priority, rec.Data.RData.Weight, rec.Data.RData.Port, rec.Data.RData.Target)
 	default:
 		fmt.Println("unknown response", rec)
 		return fmt.Errorf("Invalid Dyn record type: %s", rec.Data.RecordType)
@@ -234,6 +236,9 @@ func buildRData(r *Record) (DataBlock, error) {
 		rdata = DataBlock{
 			TxtData: r.Value,
 		}
+	case "SRV":
+		rdata = DataBlock{}
+		fmt.Sscanf(r.Value, "%d %d %d %s", &rdata.Priority, &rdata.Weight, &rdata.Port, &rdata.Target)
 	default:
 		return rdata, fmt.Errorf("Invalid Dyn record type: %s", r.Type)
 	}
