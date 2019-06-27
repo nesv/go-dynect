@@ -113,7 +113,7 @@ type DataBlock struct {
 	Order string `json:"order,omitempty" bson:"order,omitempty"`
 
 	// SRV
-	Port string `json:"port,omitempty" bson:"port,omitempty"`
+	Port int `json:"port,omitempty" bson:"port,omitempty"`
 
 	// IPSECKEY
 	Precendence string `json:"precendence,omitempty" bson:"precendence,omitempty"`
@@ -167,5 +167,5 @@ type DataBlock struct {
 	VertPre string `json:"vert_pre,omitempty" bson:"vert_pre,omitempty"`
 
 	// SRV
-	Weight string `json:"weight,omitempty" bson:"weight,omitempty"`
+	Weight int `json:"weight,omitempty" bson:"weight,omitempty"`
 }
