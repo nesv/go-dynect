@@ -68,8 +68,8 @@ func (c *ConvenientClient) PublishZone(zone string) error {
 	}
 	url = fmt.Sprintf("Task/%s/", resp.Data.TaskID)
 	respTask := &TaskStateResponse{}
-	// Wait until the zone is published, but no more then 20s
-	for i := 0; i < 20; i++ {
+	// Wait until the zone is published, but no more then 10s
+	for i := 0; i < 100; i++ {
 		if err := c.Do("GET", url, nil, respTask); err != nil {
 			return fmt.Errorf("Failed to get task status: %s %s", resp.Data.TaskID, err)
 		}
