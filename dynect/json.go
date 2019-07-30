@@ -63,3 +63,43 @@ type CreateZoneBlock struct {
 type PublishZoneBlock struct {
 	Publish bool `json:"publish"`
 }
+
+//PublishZoneResponseBlock holds the response for a zone publish request
+type PublishZoneResponseBlock struct {
+	Status string               `json:"status"`
+	Data   PublishZoneDataBlock `json:"data"`
+	JobID  int                  `json:"job_id"`
+	Msgs   string               `json:"-"`
+}
+
+// PublishZoneDataBlock holds the response data filed for a zone publish request
+type PublishZoneDataBlock struct {
+	TaskID      string `json:"task_id"`
+	Serial      int    `json:"serial"`
+	SerialStyle string `json:"serial_style"`
+	Zone        string `json:"zone"`
+	ZoneType    string `json:"zone_type"`
+}
+
+// TaskStateResponse hold the response body of a get one DNS task request
+// https://help.dyn.com/get-one-dns-task-api/
+type TaskStateResponse struct {
+	Status   string                `json:"status"`
+	Blocking bool                  `json:"blocking"`
+	Data     TaskStateResponseData `json:"data"`
+}
+
+// TaskStateResponseData hold the response data of a get one DNS task request
+type TaskStateResponseData struct {
+	TaskID       string `json:"task_id"`
+	Name         string `json:"name"`
+	CustomerName string `json:"customer_name"`
+	ZoneName     string `json:"zone_name"`
+	Status       string `json:"status"`
+	StepCount    int    `json:"step_count"`
+	TotalSteps   int    `json:"total_steps"`
+	Blocking     bool   `json:"blocking"`
+	Debug        string `json:"blocking,omitempty"`
+	CreateTS     int    `json:"created_ts"`
+	ModifiedTS   int    `json:"modified_ts"`
+}
