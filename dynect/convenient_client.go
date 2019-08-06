@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // ConvenientClient A client with extra helper methods for common actions
@@ -61,9 +62,22 @@ func (c *ConvenientClient) PublishZone(zone string) error {
 	data := &PublishZoneBlock{
 		Publish: true,
 	}
-
-	if err := c.Do("PUT", url, data, nil); err != nil {
+	var resp PublishZoneResponseBlock
+	if err := c.Do("PUT", url, data, &resp); err != nil {
 		return fmt.Errorf("Failed to publish zone: %s", err)
+	}
+	url = fmt.Sprintf("Task/%s/", resp.Data.TaskID)
+	// Wait until the zone is published, but no more then 10s
+	for i := 0; i < 100; i++ {
+		var respTask TaskStateResponse
+		if err := c.Do("GET", url, nil, &respTask); err != nil {
+			return fmt.Errorf("Failed to get task status: %s %s", resp.Data.TaskID, err)
+		}
+		log.Printf("Publishing zone %s. Status: %#+v : %#+v\n", zone, respTask.Data.Status, respTask)
+		if respTask.Data.Status == "complete" {
+			break
+		}
+		time.Sleep(100 * time.Millisecond)
 	}
 
 	return nil
